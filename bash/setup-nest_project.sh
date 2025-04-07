@@ -47,26 +47,41 @@ cd "$PROJECT_NAME" || exit 1
 
 colored_echo 36 "📦 Cloning default repository (excluding /bash folder)..."
 
-# Initialize git repository
-git init
-git remote add origin "$DEFAULT_REPO"
+# Clone the repo without initializing a new git repository and suppress output
+git clone --depth 1 --single-branch --branch master "$DEFAULT_REPO" . &>/dev/null
 
-# Enable sparse-checkout and exclude the /bash folder
-git config core.sparseCheckout true
+# Enable sparse-checkout and exclude the /bash folder, suppress git output
+git config core.sparseCheckout true &>/dev/null
 echo "/*" > .git/info/sparse-checkout  # Include everything
 echo "!/bash/*" >> .git/info/sparse-checkout  # Exclude the bash folder
 
-# Perform the actual clone
-git pull origin main
+# Fetch all branches and check out the default branch (either 'main' or 'master')
+git fetch origin &>/dev/null
+git checkout $(git symbolic-ref --short HEAD || echo "master") &>/dev/null
+git pull origin $(git symbolic-ref --short HEAD || echo "master") &>/dev/null
+
+# Remove existing .git directory to clean the repository
+rm -rf .git
+colored_echo 32 "✔ Existing .git directory removed."
+
+# Re-initialize a fresh .git repository and suppress output
+git init &>/dev/null
+colored_echo 32 "✔ New .git repository initialized."
+
 show_progress 10
 
 # ========== UPDATE PACKAGE.JSON ==========
 
 colored_echo 36 "📝 Updating package name and version in package.json..."
-sed -i.bak "s/\"name\": \".*\"/\"name\": \"$PROJECT_NAME\"/" package.json
-sed -i.bak "s/\"version\": \".*\"/\"version\": \"$DEFAULT_VERSION\"/" package.json
-rm package.json.bak
-colored_echo 32 "✔ package.json updated."
+if [ -f "package.json" ]; then
+  sed -i.bak "s/\"name\": \".*\"/\"name\": \"$PROJECT_NAME\"/" package.json
+  sed -i.bak "s/\"version\": \".*\"/\"version\": \"$DEFAULT_VERSION\"/" package.json
+  rm package.json.bak
+  colored_echo 32 "✔ package.json updated."
+else
+  colored_echo 31 "❌ package.json not found after cloning."
+  exit 1
+fi
 
 show_progress 30
 
@@ -89,18 +104,20 @@ show_progress 45
 # ========== INSTALL DEPENDENCIES ==========
 
 colored_echo 36 "📥 Installing dependencies with $MANAGER..."
+
+# Redirecting stderr to /dev/null to hide npm warnings and git messages
 case $MANAGER in
   yarn)
-    yarn install
+    yarn install &>/dev/null
     ;;
   pnpm)
-    pnpm install
+    pnpm install &>/dev/null
     ;;
   bun)
-    bun install
+    bun install &>/dev/null
     ;;
   npm)
-    npm install
+    npm install &>/dev/null
     ;;
   *)
     colored_echo 31 "❌ Unknown package manager"
@@ -113,8 +130,8 @@ echo ""
 
 # ========== COPY .env FILE ==========
 
-if [ -f "env.sample" ]; then
-  cp env.sample .env
+if [ -f ".env.sample" ]; then
+  cp .env.sample .env
   colored_echo 32 "✔ .env file created from env.sample."
 else
   colored_echo 33 "⚠ env.sample not found. Skipping .env creation."
