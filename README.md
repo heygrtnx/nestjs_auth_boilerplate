@@ -1,99 +1,106 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# NestJS Project Setup Script
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This script automates the process of setting up a NestJS project by cloning a default repository, initializing a new Git repository, updating the `package.json` file, installing dependencies, and creating the `.env` file from the `.env.sample` file.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+- Clone the default NestJS boilerplate repository.
+- Customize the project name and version.
+- Detect and install dependencies using the appropriate package manager (`npm`, `yarn`, `pnpm`, `bun`).
+- Clean up the repository by removing the existing `.git` directory and re-initializing it.
+- Display progress in a modern table-like format.
+- Skip any warnings related to npm/yarn/pnpm.
+- Automatically create a `.env` file from `.env.sample` if it exists.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Prerequisites
 
-## Project setup
+Before running this script, ensure you have the following dependencies installed:
 
-```bash
-$ npm install
+- **Git**: Required to clone the repository.
+- **Node.js**: Required for installing dependencies and running the project.
+- **Package Managers**: One or more of the following package managers:
+  - **npm**
+  - **yarn**
+  - **pnpm**
+  - **bun**
+
+## Usage
+
+1. **Clone this repository or download the script**:
+
+   ```bash
+   git clone https://github.com/thegrtnx/nestjs_auth_boilerplate
+   cd nestjs_auth_boilerplate
+   ```
+
+2. **Make the script executable**:
+
+   ```bash
+   chmod +x setup-nest_project.sh
+   ```
+
+3. **Run the script**:
+
+   ```bash
+   ./setup-nest_project.sh
+   ```
+
+4. **Enter the project name**: When prompted, enter the name of your project. If you leave it blank, the script will use `nestjs-auth` as the default project name.
+
+   Example:
+
+   ```bash
+   🔧 Please enter the project name: my-nest-project
+   📦 Using version: 1.0.0
+   📂 Creating project folder: my-nest-project
+   ```
+
+5. **Wait for the script to complete**: The script will clone the repository, set up the project, and install dependencies. It will also create the `.env` file if the `.env.sample` file exists.
+
+6. **Project Setup Complete**: Once finished, you can navigate into your project folder and start coding.
+
+   Example:
+
+   ```bash
+   🎉 Project setup complete! Navigate to my-nest-project and start coding.
+   ```
+
+## Workflow
+
+The script performs the following steps:
+
+1. **Clone the repository**: It clones the [NestJS Boilerplate](https://github.com/thegrtnx/nestjs_auth_boilerplate) while excluding the `/bash` directory.
+2. **Update `package.json`**: It modifies the `name` and `version` fields in the `package.json` file based on user input or defaults.
+3. **Detect Package Manager**: It detects the package manager by checking for lock files (`yarn.lock`, `pnpm-lock.yaml`, `bun.lockb`), or defaults to `npm` if none is found.
+4. **Install Dependencies**: It installs project dependencies using the detected package manager.
+5. **Create `.env` file**: If `.env.sample` exists, it creates the `.env` file by copying the contents.
+6. **Progress Output**: It displays a table-like progress bar, showing the status of each task in the process.
+
+## Example Output
+
+Here’s an example of how the output will look:
+
 ```
-
-## Compile and run the project
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+| Task                             | Status     | Progress   |
+|-----------------------------------|------------|------------|
+| Cloning Repository                | In Progress| 10%        |
+|-----------------------------------|------------|------------|
+✔ Existing .git directory removed.
+✔ New .git repository initialized.
+| Cloning Repository                | Completed  | 100%       |
+|-----------------------------------|------------|------------|
+| Updating package.json             | Completed  | 30%        |
+|-----------------------------------|------------|------------|
+| Detecting package manager         | Completed  | 45%        |
+|-----------------------------------|------------|------------|
+| Installing dependencies           | In Progress| 60%        |
+|-----------------------------------|------------|------------|
+✔ .env file created from env.sample.
+| Copying .env file                 | Completed  | 100%       |
+|-----------------------------------|------------|------------|
+🎉 Project setup complete! Navigate to my-nest-project and start coding.
 ```
-
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
