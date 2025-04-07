@@ -162,14 +162,65 @@ show_table "Installing dependencies" "Completed" 80 32 "Dependencies installed."
 echo ""
 
 # ========== COPY .env FILE ==========
+colored_echo 36 "🛠 Setting up .env file..."
+
 if [ -f ".env.sample" ]; then
   cp .env.sample .env
-  colored_echo 32 "✔ .env file created from env.sample."
+
+  # Generate secure keys
+  REFRESH_SECRET=$(openssl rand -hex 32)
+  SECRET_KEY=$(openssl rand -hex 32)
+
+  # VAPID keys setup
+  if command -v web-push &> /dev/null; then
+    VAPID_KEYS=$(web-push generate-vapid-keys)
+    VAPID_PUBLIC_KEY=$(echo "$VAPID_KEYS" | grep "Public Key" | awk '{print $NF}')
+    VAPID_PRIVATE_KEY=$(echo "$VAPID_KEYS" | grep "Private Key" | awk '{print $NF}')
+  else
+    colored_echo 33 "⚠ 'web-push' is not installed. Skipping VAPID key generation."
+    colored_echo 33 "➡ To install: \`npm install -g web-push\`"
+    colored_echo 33 "➡ Then run: \`web-push generate-vapid-keys\` and manually update your .env file:"
+    colored_echo 33 "   VAPID_PUBLIC_KEY=your-public-key"
+    colored_echo 33 "   VAPID_PRIVATE_KEY=your-private-key"
+    VAPID_PUBLIC_KEY=""
+    VAPID_PRIVATE_KEY=""
+  fi
+
+  # Wrap platform name in quotes if it contains spaces
+  if [[ "$PROJECT_NAME" =~ \  ]]; then
+    PLATFORM_NAME="\"$PROJECT_NAME\""
+  else
+    PLATFORM_NAME=$PROJECT_NAME
+  fi
+
+  # Clean existing vars
+  sed -i.bak "/^EMAIL_PROVIDER=/d" .env
+  sed -i.bak "/^ENVIRONMENT=/d" .env
+  sed -i.bak "/^REFRESH_SECRET_KEY=/d" .env
+  sed -i.bak "/^SECRET_KEY=/d" .env
+  sed -i.bak "/^VAPID_PUBLIC_KEY=/d" .env
+  sed -i.bak "/^VAPID_PRIVATE_KEY=/d" .env
+  sed -i.bak "/^PLATFORM_NAME=/d" .env
+
+  # Append updated vars
+  cat <<EOF >> .env
+EMAIL_PROVIDER=google
+ENVIRONMENT=TEST
+REFRESH_SECRET_KEY=$REFRESH_SECRET
+SECRET_KEY=$SECRET_KEY
+VAPID_PUBLIC_KEY=$VAPID_PUBLIC_KEY
+VAPID_PRIVATE_KEY=$VAPID_PRIVATE_KEY
+PLATFORM_NAME=$PLATFORM_NAME
+EOF
+
+  rm .env.bak
+  colored_echo 32 "✔ .env file customized and created."
 else
   colored_echo 33 "⚠ env.sample not found. Skipping .env creation."
 fi
 
 show_table "Copying .env file" "Completed" 100 32 ".env file created."
+
 
 # ========== NEXT STEPS ==========
 echo -e "\n\n"

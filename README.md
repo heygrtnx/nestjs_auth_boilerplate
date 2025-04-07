@@ -10,6 +10,7 @@ A simple interactive Bash script to quickly bootstrap a [NestJS Auth Boilerplate
 - Customize the project name and version.
 - Detect and install dependencies using the appropriate package manager (`npm`, `yarn`, `pnpm`, `bun`).
 - Automatically updates `package.json` with your project name and version
+- Securely generate `SECRET_KEY` and `REFRESH_SECRET_KEY` using `openssl`
 - Copies `.env.sample` to `.env` if available
 
 ---
