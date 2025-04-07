@@ -4,7 +4,18 @@
 DEFAULT_REPO="https://github.com/thegrtnx/nestjs_auth_boilerplate"
 DEFAULT_VERSION="1.0.0"
 
-echo -e "\n"  # one line breaks before next steps
+echo -e "\n"  
+# Detect OS
+OS=$(uname -s)
+case "$OS" in
+  Linux*)     OS_TYPE="Linux";;
+  Darwin*)    OS_TYPE="macOS";;
+  CYGWIN*|MINGW32*|MSYS*|MINGW*) OS_TYPE="Windows";;
+  *)          OS_TYPE="Unknown";;
+esac
+
+echo -e "\nOperating System Detected: $OS_TYPE\n"
+
 # ========== ASCII BANNER ==========
 cat << "EOF"
 
