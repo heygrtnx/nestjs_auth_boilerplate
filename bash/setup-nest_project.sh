@@ -4,6 +4,7 @@
 DEFAULT_REPO="https://github.com/thegrtnx/nestjs_auth_boilerplate"
 DEFAULT_VERSION="1.0.0"
 
+echo -e "\n"  # one line breaks before next steps
 # ========== ASCII BANNER ==========
 cat << "EOF"
 
@@ -38,11 +39,12 @@ show_table() {
   local status=$2
   local progress=$3
   local color_code=$4
+  local report=$5
 
   printf "\n"
-  printf "| %-35s | %-10s | %-10s |\n" "$task" "$status" "$progress"
-  printf "|%-37s|%-12s|%-12s|\n" "----------------------------------" "------------" "------------"
-  colored_echo $color_code "$task - $status ($progress%)"
+  printf "| %-35s | %-10s | %-10s | %-30s |\n" "$task" "$status" "$progress" "$report"
+  printf "|%-37s|%-12s|%-12s|%-30s|\n" "----------------------------------" "------------" "------------" "------------------------------"
+  colored_echo $color_code "$task - $status ($progress%) - $report"
 }
 
 colored_echo() {
@@ -69,7 +71,7 @@ colored_echo 36 "📂 Creating project folder: $PROJECT_NAME"
 mkdir "$PROJECT_NAME"
 cd "$PROJECT_NAME" || exit 1
 
-show_table "Cloning Repository" "In Progress" 10 33
+show_table "Cloning Repository" "In Progress" 10 33 "Cloning repository..."
 
 # ========== CLONE THE REPO WITH SPARSE CHECKOUT ==========
 
@@ -102,7 +104,7 @@ colored_echo 32 "✔ Existing .git directory removed."
 
 colored_echo 32 "✔ New .git repository initialized."
 
-show_table "Cloning Repository" "Completed" 100 32
+show_table "Cloning Repository" "Completed" 100 32 "Cloning completed."
 
 # ========== UPDATE PACKAGE.JSON ==========
 
@@ -117,7 +119,7 @@ else
   exit 1
 fi
 
-show_table "Updating package.json" "Completed" 30 32
+show_table "Updating package.json" "Completed" 30 32 "Updated package.json."
 
 # ========== DETECT PACKAGE MANAGER ==========
 
@@ -133,13 +135,13 @@ else
 fi
 colored_echo 32 "✔ Detected: $MANAGER"
 
-show_table "Detecting package manager" "Completed" 45 32
+show_table "Detecting package manager" "Completed" 45 32 "Package manager detected."
 
 # ========== INSTALL DEPENDENCIES ==========
 
 colored_echo 36 "📥 Installing dependencies with $MANAGER..."
 
-show_table "Installing dependencies" "In Progress" 60 33
+show_table "Installing dependencies" "In Progress" 60 33 "Installing dependencies..."
 
 # Redirecting stderr to /dev/null to hide npm warnings and git messages
 {
@@ -163,7 +165,7 @@ show_table "Installing dependencies" "In Progress" 60 33
   esac
 } & spinner $!
 
-show_table "Installing dependencies" "Completed" 80 32
+show_table "Installing dependencies" "Completed" 80 32 "Dependencies installed."
 echo ""
 
 # ========== COPY .env FILE ==========
@@ -175,7 +177,7 @@ else
   colored_echo 33 "⚠ env.sample not found. Skipping .env creation."
 fi
 
-show_table "Copying .env file" "Completed" 100 32
+show_table "Copying .env file" "Completed" 100 32 ".env file created."
 
 # ========== NEXT STEPS ==========
 echo -e "\n\n"  # two line breaks before next steps
