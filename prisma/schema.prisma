@@ -1,0 +1,217 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  userId             String               @id @default(cuid())
+  firstName          String
+  lastName           String
+  email              String               @unique
+  dob                String?
+  role               Role                 @default(USER)
+  referralCode       String?              @unique
+  telephoneNumber    String               @unique
+  profile_picture    String?
+  otp                String?
+  refreshToken       String?
+  refreshTokenExpiry DateTime?
+  tokenVersion       Int                  @default(0)
+  accountStatus      Status               @default(PENDING)
+  isActive           Boolean              @default(false)
+  otpExpiry          DateTime?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  Admins             Admins?
+  Wallet             Wallet?
+  WalletBalance      WalletBalance?
+  Referral           Referral?
+  TransactionHistory TransactionHistory[]
+  PushSubscription   PushSubscription?
+
+  @@index([userId])
+  @@index([email])
+  @@index([referralCode])
+  @@index([accountStatus])
+  @@index([isActive])
+  @@index([role])
+  @@index([telephoneNumber])
+  @@index([createdAt])
+  @@index([updatedAt])
+}
+
+model Referral {
+  referralId   String   @id @default(cuid())
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  referralCode String   @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([referralId])
+  @@index([referralCode])
+  @@index([userId])
+  @@index([createdAt])
+  @@index([updatedAt])
+}
+
+model Wallet {
+  wallet_id     String   @id @default(cuid())
+  accountNumber String   @unique
+  bankName      String?
+  dva_id        Int?
+  accountName   String?
+  bankId        Int?
+  currency      String?
+  cust_code     String?  @unique
+  cust_id       Int?
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  @@index([wallet_id])
+  @@index([userId])
+  @@index([accountNumber])
+  @@index([bankName])
+  @@index([accountName])
+  @@index([created_at])
+  @@index([updated_at])
+}
+
+model WalletBalance {
+  balanceId   String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  balance     Float    @default(0.0)
+  lastBalance Float    @default(0.0)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@index([balanceId])
+  @@index([userId])
+  @@index([balance])
+  @@index([created_at])
+  @@index([updated_at])
+}
+
+model TransactionHistory {
+  transactionHistoryId String      @id @default(cuid())
+  amount               Float
+  paymentType          PaymentType
+  prevBalance          Float
+  newBalance           Float
+  paymentReference     String
+  extRef               String?
+  currency             String?
+  channel              String?
+  charge               Float?
+  chargeNarration      String?
+  senderBank           String?
+  senderAccount        String?
+  recieverBank         String?
+  recieverAccount      String?
+  paymentDescription   String
+  paid_at              DateTime?
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+  User                 User?       @relation(fields: [userUserId], references: [userId])
+  userUserId           String?
+
+  @@index([transactionHistoryId])
+  @@index([amount])
+  @@index([paymentType])
+  @@index([paymentReference])
+  @@index([extRef])
+  @@index([currency])
+  @@index([channel])
+  @@index([charge])
+  @@index([chargeNarration])
+  @@index([senderBank])
+  @@index([senderAccount])
+  @@index([recieverBank])
+  @@index([recieverAccount])
+  @@index([paymentDescription])
+  @@index([userUserId])
+  @@index([createdAt])
+  @@index([updatedAt])
+}
+
+model PushSubscription {
+  id           String   @id @default(uuid())
+  userId       String   @unique
+  subscription Json
+  user         User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([id])
+  @@index([userId])
+  @@index([createdAt])
+  @@index([updatedAt])
+}
+
+model Admins {
+  adminid      String @id @default(cuid())
+  password     String
+  userid       String @unique
+  inviteStatus Status @default(PENDING)
+  user         User   @relation(fields: [userid], references: [userId], onDelete: Cascade)
+
+  @@index([adminid])
+  @@index([userid])
+  @@index([inviteStatus])
+  @@index([password])
+}
+
+enum PaymentType {
+  DEBIT
+  CREDIT
+  REFUND
+  COUPON
+}
+
+enum Role {
+  USER
+  RIDER
+  SUPER_ADMIN
+  ADMIN
+  FINANCE
+  DEVELOPER
+  SUPPORT
+}
+
+enum PaymentSource {
+  PAYSTACK
+  WALLET
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
+enum Status {
+  ACTIVE
+  APPROVED
+  PENDING
+  SUSPENDED
+  ARCHIVED
+  FRAUD
+  REJECTED
+  FULFILLED
+  ACCEPTED
+  KYC_1
+  KYC_2
+  KYC_3
+}
+
+enum AccountType {
+  INDIVIDUAL
+  BUSINESS
+}

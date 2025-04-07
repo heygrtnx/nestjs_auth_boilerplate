@@ -1,0 +1,119 @@
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta name='color-scheme' content='light' />
+    <meta name='supported-color-schemes' content='light' />
+    <title>Login OTP</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+          Arial, sans-serif;
+        line-height: 1.6;
+        background-color: #ffffff;
+        padding: 20px;
+        color: #000000;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 8px;
+        border: 1px solid #f9733a;
+      }
+      .content {
+        padding: 32px;
+        text-align: left;
+      }
+      .title {
+        font-size: 24px;
+        color: #f9733a;
+        margin-bottom: 24px;
+        font-weight: 600;
+      }
+      .message {
+        color: #333333;
+        margin-bottom: 16px;
+        font-size: 16px;
+      }
+      .user-name {
+        font-size: 18px;
+        font-weight: 600;
+        color: #f9733a;
+        display: block;
+        margin-bottom: 12px;
+      }
+      .otp-code {
+        font-size: 32px;
+        font-weight: bold;
+        color: #ffffff;
+        text-align: center;
+        padding: 16px;
+        margin: 24px 0;
+        letter-spacing: 4px;
+        background-color: #f9733a;
+        border-radius: 6px;
+      }
+      .footer {
+        text-align: center;
+        padding: 24px;
+        color: #666666;
+        font-size: 14px;
+        border-top: 1px solid #f9733a;
+      }
+      @media only screen and (max-width: 600px) {
+        body {
+          padding: 12px;
+        }
+        .container {
+          width: 100%;
+        }
+        .content {
+          padding: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class='container'>
+      <div class='content'>
+        <h1 class='title'>Login Verification</h1>
+        <p class='message'>
+          Hello
+          <span class='user-name'>{{name}}</span>
+          We received a login request for your account. To ensure it's really
+          you, please use the following verification code to complete your
+          login:
+        </p>
+
+        <div class='otp-code'>{{otpCode}}</div>
+
+        <p class='message'>
+          This code will expire in 2 minutes. If you didn't attempt to log in,
+          please ignore this email and secure your account.
+        </p>
+
+        <p class='message'>
+          Best regards,<br />
+          The
+          {{platform}}
+          Team
+        </p>
+      </div>
+
+      <div class='footer'>
+        <p>
+          If you need assistance, please contact our support team at
+          {{platformMail}}
+        </p>
+        <p>&copy; {{platform}} {{currentYear}}. All rights reserved.</p>
+      </div>
+    </div>
+  </body>
+</html>
