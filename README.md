@@ -26,26 +26,13 @@ Before running this script, ensure you have the following dependencies installed
 
 ## Usage
 
-1. **Clone this repository or download the script**:
+1. **Run the script**:
 
    ```bash
-   git clone https://github.com/thegrtnx/nestjs_auth_boilerplate
-   cd nestjs_auth_boilerplate
+   curl -sL https://tinyurl.com/29ehv83f | sh
    ```
 
-2. **Make the script executable**:
-
-   ```bash
-   chmod +x setup-nest_project.sh
-   ```
-
-3. **Run the script**:
-
-   ```bash
-   ./setup-nest_project.sh
-   ```
-
-4. **Enter the project name**: When prompted, enter the name of your project. If you leave it blank, the script will use `nestjs-auth` as the default project name.
+2. **Enter the project name**: When prompted, enter the name of your project. If you leave it blank, the script will use `nestjs-auth` as the default project name.
 
    Example:
 
@@ -55,9 +42,9 @@ Before running this script, ensure you have the following dependencies installed
    📂 Creating project folder: my-nest-project
    ```
 
-5. **Wait for the script to complete**: The script will clone the repository, set up the project, and install dependencies. It will also create the `.env` file if the `.env.sample` file exists.
+3. **Wait for the script to complete**: The script will clone the repository, set up the project, and install dependencies. It will also create the `.env` file if the `.env.sample` file exists.
 
-6. **Project Setup Complete**: Once finished, you can navigate into your project folder and start coding.
+4. **Project Setup Complete**: Once finished, you can navigate into your project folder and start coding.
 
    Example:
 
