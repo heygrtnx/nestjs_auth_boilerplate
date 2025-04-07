@@ -1,112 +1,191 @@
-# NestJS Auth Boilerplate Setup Script 🛠️
+# ⚡ NestJS Auth Boilerplate Setup Script
 
-A simple interactive Bash script to quickly bootstrap a [NestJS Auth Boilerplate](https://github.com/thegrtnx/nestjs_auth_boilerplate) project — complete with environment setup, dependency installation, authentication, Swagger integration, built-in support for Paystack, Cloudinary, SMTP email, dynamic Handlebars templates, wallet and referral systems, and pre-configured project settings right out of the box.
+A powerful, interactive Bash script that helps you **bootstrap a full-featured NestJS authentication project** in seconds — with **out-of-the-box support** for common third-party services, API documentation, environment setup, key generation, and more.
+
+> 🔗 **Repo**: [thegrtnx/nestjs_auth_boilerplate](https://github.com/thegrtnx/nestjs_auth_boilerplate)
 
 ---
 
 ## 🚀 Features
 
-- Clone the default NestJS boilerplate repository.
-- Customize the project name and version.
-- Detect and install dependencies using the appropriate package manager (`npm`, `yarn`, `pnpm`, `bun`).
-- Automatically updates `package.json` with your project name and version
-- Securely generate `SECRET_KEY` and `REFRESH_SECRET_KEY` using `openssl`
-- Copies `.env.sample` to `.env` if available
+✅ Automatically:
+
+- Clones the boilerplate repo via Git
+- Customizes project name (via prompt or argument)
+- Sets up `.env` file from `.env.sample`
+- Injects default environment values:
+  - `EMAIL_PROVIDER=google`
+  - `ENVIRONMENT=TEST`
+- Generates secure keys for:
+  - `SECRET_KEY` and `REFRESH_SECRET_KEY` via `openssl`
+- Detects and uses your preferred package manager (`npm`, `yarn`, `pnpm`, `bun`)
+- Installs dependencies
+- Cleans up `.git` and reinitializes
+- Provides clear visual feedback with tables and a spinner
+- Warns you to install [`web-push`](https://www.npmjs.com/package/web-push) to generate `VAPID` keys for push notifications
 
 ---
 
-## 📦 Prerequisites
+## 📁 What’s Inside the Boilerplate?
 
-Before running this script, ensure you have the following dependencies installed:
+Here’s what the [NestJS Auth Boilerplate](https://github.com/thegrtnx/nestjs_auth_boilerplate) includes out of the box:
 
-- **Git**: Required to clone the repository.
+### ✅ Core Features
 
-- **Node.js**: Required for installing dependencies and running the project.
+- 🚀 **Auth System** — with JWT, Refresh tokens, email/password login
+- 📦 **Pre-configured Prisma ORM** — ready for PostgreSQL or other databases
+- 💌 **Email Service** — SMTP support with dynamic [Handlebars](https://handlebarsjs.com/) templates
+- 🔐 **Access/Refresh Tokens** — generated via `openssl`
+- 🧰 **Swagger Integration** — API docs at `/docs`
+- 🌐 **CORS and Global Pipes**
+- 📥 **Cloudinary Integration** — for image uploads
+- 💳 **Paystack Integration** — for payment processing
+- 👛 **Wallet System** — with transaction logs
+- 🧬 **Referral System** — to track and reward invites
 
-- **Package Managers**: One or more of the following package managers:
+### 🧩 `src/lib` Folder Includes:
 
-  - **npm**
-  - **yarn**
-  - **pnpm**
-  - **bun**
+- **Custom Logger Service**
+- **Google Auth Strategies**
+- **Paystack Payment Utils**
+- **Email Handler (with SMTP and Handlebars)**
+- **OTP Generator**
+- **Cloudinary SDK**
+- **Utilities for handling pagination, validation, formatting, etc.**
 
 ---
 
-## ⚡ Usage
+## 🛠️ Prerequisites
 
-### Option 1: Run directly with `curl` and `bash`
+Before you begin, ensure you have the following installed:
+
+| Tool              | Required?     | Install Link                                               |
+| ----------------- | ------------- | ---------------------------------------------------------- |
+| Git               | ✅            | https://git-scm.com/downloads                              |
+| Node.js           | ✅            | https://nodejs.org/en/download                             |
+| npm/yarn/pnpm/bun | ✅            | Choose one as your package manager                         |
+| OpenSSL           | ✅            | Comes pre-installed on most Unix systems                   |
+| `web-push`        | ⚠️ Optional\* | `npm install -g web-push` — used for generating VAPID keys |
+
+> ⚠️ If `web-push` is not installed globally, the script will warn you and ask you to manually generate VAPID keys using:
+>
+> ```bash
+> web-push generate-vapid-keys
+> ```
+
+---
+
+## ⚡ How to Use
+
+### ✅ Option 1 — Run With Prompt (Interactive)
 
 ```bash
 bash <(curl -s https://raw.githubusercontent.com/thegrtnx/nestjs_auth_boilerplate/master/bash/setup-nest_project.sh)
 ```
 
-You’ll be prompted to enter a project name.
+This will prompt you to enter your desired project name.
 
 ---
 
-### Option 2: Provide project name as an argument
+### ✅ Option 2 — Provide Project Name Directly
 
 ```bash
-bash <(curl -s https://raw.githubusercontent.com/thegrtnx/nestjs_auth_boilerplate/master/bash/setup-nest_project.sh) my-new-app
+bash <(curl -s https://raw.githubusercontent.com/thegrtnx/nestjs_auth_boilerplate/master/bash/setup-nest_project.sh) "My New Project"
 ```
 
-This skips the prompt and uses `my-new-app` as the folder and project name.
+This will skip the prompt and use `"My New Project"` as both the folder name and project name.
 
 ---
 
-## 📁 What It Does
-
-- Clones the boilerplate repo
-- Removes `.git` and re-initializes a clean repo
-- Renames the project in `package.json`
-- Installs dependencies using detected package manager
-- Sets up a `.env` file if `.env.sample` exists
-
----
-
-## Example Output
-
-Here’s an example of how the output will look:
+## 🧾 Example Script Output
 
 ```
-| Task                             | Status     | Progress   |
-|-----------------------------------|------------|------------|
-| Cloning Repository                | In Progress| 10%        |
-|-----------------------------------|------------|------------|
-✔ Existing .git directory removed.
-✔ New .git repository initialized.
-| Cloning Repository                | Completed  | 100%       |
-|-----------------------------------|------------|------------|
-| Updating package.json             | Completed  | 30%        |
-|-----------------------------------|------------|------------|
-| Detecting package manager         | Completed  | 45%        |
-|-----------------------------------|------------|------------|
-| Installing dependencies           | In Progress| 60%        |
-|-----------------------------------|------------|------------|
+| Cloning Repository                | Completed  | 100%       | Cloning completed.
 ✔ .env file created from env.sample.
-| Copying .env file                 | Completed  | 100%       |
-|-----------------------------------|------------|------------|
-🎉 Project setup complete! Navigate to my-nest-project and start coding.
+✔ SECRET_KEY and REFRESH_SECRET_KEY generated.
+⚠ web-push not found. Please install with: npm install -g web-push
+✔ package.json updated.
+✔ Dependencies installed with yarn.
+🎉 Project setup complete! Navigate to your project and start building.
 ```
 
 ---
 
 ## 🧭 Next Steps
 
+After setup, do the following:
+
 ```bash
-cd my-new-app
-# Edit .env with your own values
+cd "My New Project"
+
+# Edit your .env file with actual values
+nano .env
+
+# Run database and start project
 npm run prisma:dev
 npm run start:dev
-npm run prisma:studio  # optional
+
+# Optional
+npm run prisma:studio
 ```
+
+---
+
+## 💡 Tips
+
+### 🔐 Generate VAPID Keys (If Missing)
+
+If the script couldn't generate VAPID keys automatically, run this manually:
+
+```bash
+npm install -g web-push
+web-push generate-vapid-keys
+```
+
+Then add the values to `.env` like:
+
+```env
+VAPID_PUBLIC_KEY=your_generated_public_key
+VAPID_PRIVATE_KEY=your_generated_private_key
+```
+
+---
+
+## 🖥️ Platform-Specific Notes
+
+### 🪟 Windows Users
+
+- Use **Git Bash** or **WSL** (Windows Subsystem for Linux) to run this script.
+- Avoid running it in PowerShell or Command Prompt directly.
+
+### 🍏 macOS Users
+
+- Script runs natively in **Terminal**.
+- Make sure `bash`, `openssl`, and `git` are available (pre-installed on macOS).
+
+### 🐧 Linux Users
+
+- Works out of the box on most distros.
+- If missing `openssl`, install via `sudo apt install openssl` (Debian/Ubuntu) or equivalent.
+
+---
+
+## 🐞 Found a Bug or Have a Suggestion?
+
+If you run into any problems, have ideas for improvements, or want to suggest a feature:
+
+### 👉 [Create a GitHub Issue Here](https://github.com/thegrtnx/nestjs_auth_boilerplate/issues)
+
+Whether it's a typo, a bug, or an enhancement — your feedback is welcome and appreciated! Just click the link above, select the appropriate issue template, and let us know how we can make this better.
+
+> 💡 Tip: Be as descriptive as possible. Include steps to reproduce, logs if available, and your OS/environment details.
 
 ---
 
 ## 👨‍💻 Author
 
-**[@thegrtnx](https://github.com/thegrtnx)**  
-Love it? ⭐ the [repo](https://github.com/thegrtnx/nestjs_auth_boilerplate) and follow for more!
+Made with ❤️ by [**@thegrtnx**](https://github.com/thegrtnx)  
+⭐ Star the [repo](https://github.com/thegrtnx/nestjs_auth_boilerplate) and follow for updates!
 
 ---
 
