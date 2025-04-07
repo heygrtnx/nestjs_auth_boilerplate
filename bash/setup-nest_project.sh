@@ -65,6 +65,7 @@ colored_echo() {
 }
 
 # ========== USER INPUT ==========
+# Prompt for project name
 colored_echo 36 "🔧 Please enter the project name: "
 read -r PROJECT_NAME
 
@@ -77,7 +78,6 @@ fi
 colored_echo 36 "📦 Using version: $DEFAULT_VERSION"
 
 # ========== CREATE PROJECT FOLDER ==========
-
 colored_echo 36 "📂 Creating project folder: $PROJECT_NAME"
 mkdir "$PROJECT_NAME"
 cd "$PROJECT_NAME" || exit 1
