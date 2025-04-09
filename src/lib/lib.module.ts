@@ -4,7 +4,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { WebPushModule } from './web-push/web-push.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { SendMailsModule } from './email/sendMail.module';
-
+import { RedisModule } from './redis/redis.module';
 @Module({
   imports: [
     PaystackModule,
@@ -12,6 +12,7 @@ import { SendMailsModule } from './email/sendMail.module';
     WebPushModule,
     PrismaModule,
     SendMailsModule,
+    RedisModule,
   ],
 })
 export class LibModule {}

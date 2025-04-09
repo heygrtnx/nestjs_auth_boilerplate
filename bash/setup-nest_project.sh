@@ -171,20 +171,16 @@ if [ -f ".env.sample" ]; then
   REFRESH_SECRET=$(openssl rand -hex 32)
   SECRET_KEY=$(openssl rand -hex 32)
 
-  # VAPID keys setup
-  if command -v web-push &> /dev/null; then
-    VAPID_KEYS=$(web-push generate-vapid-keys)
-    VAPID_PUBLIC_KEY=$(echo "$VAPID_KEYS" | grep "Public Key" | awk '{print $NF}')
-    VAPID_PRIVATE_KEY=$(echo "$VAPID_KEYS" | grep "Private Key" | awk '{print $NF}')
-  else
-    colored_echo 33 "⚠ 'web-push' is not installed. Skipping VAPID key generation."
-    colored_echo 33 "➡ To install: \`npm install -g web-push\`"
-    colored_echo 33 "➡ Then run: \`web-push generate-vapid-keys\` and manually update your .env file:"
-    colored_echo 33 "   VAPID_PUBLIC_KEY=your-public-key"
-    colored_echo 33 "   VAPID_PRIVATE_KEY=your-private-key"
-    VAPID_PUBLIC_KEY=""
-    VAPID_PRIVATE_KEY=""
+  # Ensure web-push is installed
+  if ! command -v web-push &> /dev/null; then
+    colored_echo 33 "⚠ 'web-push' is not installed. Installing now..."
+    npm install -g web-push
   fi
+
+  # VAPID keys setup
+  VAPID_KEYS=$(web-push generate-vapid-keys)
+  VAPID_PUBLIC_KEY=$(echo "$VAPID_KEYS" | grep "Public Key" | awk '{print $NF}')
+  VAPID_PRIVATE_KEY=$(echo "$VAPID_KEYS" | grep "Private Key" | awk '{print $NF}')
 
   # Wrap platform name in quotes if it contains spaces
   if [[ "$PROJECT_NAME" =~ \  ]]; then
