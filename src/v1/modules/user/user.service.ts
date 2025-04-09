@@ -18,7 +18,6 @@ export class UserService {
         Wallet: true,
         WalletBalance: true,
         Referral: true,
-        UserMenuOrder: true,
       },
     });
 
@@ -44,7 +43,6 @@ export class UserService {
         Wallet: true,
         WalletBalance: true,
         Referral: true,
-        UserMenuOrder: true,
       },
     });
 
@@ -73,7 +71,6 @@ export class UserService {
         Wallet: true,
         WalletBalance: true,
         Referral: true,
-        UserMenuOrder: true,
       },
     });
 
