@@ -14,7 +14,7 @@ export class AvatarService {
       this.httpService.get(`${this.baseUrl}?seed=${seed}`),
     );
 
-    return response.config.url; // Return the URL of the generated avatar
+    return response.data; // Return the URL of the generated avatar
   }
 
   private generateRandomSeed(): string {
